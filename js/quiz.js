@@ -8,6 +8,7 @@ var allQuestions = [
 $(document).ready(function(){
 
   $("#new").toggle();
+  $(".answers").hide();
 
   currentQuestion = 0;
   correctAnswers = 0;
@@ -28,11 +29,12 @@ $(document).ready(function(){
 
       if (currentQuestion < allQuestions.length-1){
         currentQuestion += 1;
-        clearQuestion();
-        showQuestion(currentQuestion);
-        if (userAnswers[currentQuestion] !== undefined){
-          $(".answers > #"+userAnswers[currentQuestion]).prop("checked", true);
-        }
+        $(".answers").fadeOut("fast", function(){
+          showQuestion(currentQuestion);
+          if (userAnswers[currentQuestion] !== undefined){
+            $(".answers > #"+userAnswers[currentQuestion]).prop("checked", true);
+          }
+        });
       } else{
         clearQuestion();
         $("#next, #prev").toggle();
@@ -49,8 +51,10 @@ $(document).ready(function(){
   $("#prev").on("click", function(){
     if (currentQuestion  > 0){
       currentQuestion -= 1;
-      showQuestion(currentQuestion);
-      $(".answers > #"+userAnswers[currentQuestion]).prop("checked", true);
+      $(".answers").fadeOut("fast", function(){
+        showQuestion(currentQuestion);
+        $(".answers > #"+userAnswers[currentQuestion]).prop("checked", true);
+      });
     }
   });
 
@@ -62,8 +66,6 @@ $(document).ready(function(){
     $("#next, #prev").toggle();
     $("#new").toggle();
   });
-
-
 
 });
 
@@ -82,6 +84,7 @@ function showQuestion(id){
     result += "<input type='radio' name='answers' id="+index+">"+choice+"<br>";
   });
   $(".answers").html(result);
+  $(".answers").fadeIn("slow");
 }
 
 function showResult(){
